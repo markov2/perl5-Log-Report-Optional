@@ -1,0 +1,7 @@
+========== version history of Log::Report::Optional
+
+Unless noted otherwise, these changes where initiated and applied by
+Mark Overmeer.
+
+version 1.00: Sun Jan  5 17:02:42 CET 2014
+	- Split-off from Log::Report

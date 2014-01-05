@@ -1,0 +1,13 @@
+ChangeLog
+MANIFEST
+Makefile.PL
+lib/Log/Report/Minimal.pm
+lib/Log/Report/Minimal/Domain.pm
+lib/Log/Report/Optional.pm
+lib/Log/Report/Util.pm
+t/00use.t
+t/05util.t
+t/20exceptions.t
+t/21messages.t
+t/50options.t
+xt/99pod.t
