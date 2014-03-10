@@ -38,6 +38,13 @@ my %modes     = (NORMAL => 0, VERBOSE => 1, ASSERT => 2, DEBUG => 3
   , 0 => 0, 1 => 1, 2 => 2, 3 => 3);
 my @mode_accepts = ('NOTICE-', 'INFO-', 'ASSERT-', 'ALL');
 
+# horrible mutual dependency with Log::Report(::Minimal)
+sub error__x($%)
+{   if(Log::Report::Minimal->can('error')) # loaded the ::Mimimal version
+         {  Log::Report::Minimal::error(Log::Report::Minimal::__x(@_)) }
+    else { Log::Report::error(Log::Report::__x(@_)) }
+}
+
 =chapter NAME
 Log::Report::Util - helpful routines to Log::Report
 
@@ -57,9 +64,9 @@ man-page may contain some useful background information.
 
 =section Reasons
 
-=function expand_reasons REASONS
+=function expand_reasons $reasons
 Returns a sub-set of all existing message reason labels, based on the
-content REASONS string. The following rules apply:
+content $reasons string. The following rules apply:
  REASONS = BLOCK [ ',' BLOCKS]
  BLOCK   = '-' TO | FROM '-' TO | ONE | SOURCE
  FROM,TO,ONE = 'TRACE' | 'ASSERT' | ,,, | 'PANIC'
@@ -85,10 +92,10 @@ sub expand_reasons($)
         {   my $begin = $reason_code{$1 || 'TRACE'};
             my $end   = $reason_code{$2 || 'PANIC'};
             $begin && $end
-                or error __x "unknown reason {which} in '{reasons}'"
+                or error__x "unknown reason {which} in '{reasons}'"
                      , which => ($begin ? $2 : $1), reasons => $reasons;
 
-            error __x"reason '{begin}' more serious than '{end}' in '{reasons}"
+            error__x"reason '{begin}' more serious than '{end}' in '{reasons}"
               , begin => $1, end => $2, reasons => $reasons
                  if $begin >= $end;
 
@@ -100,21 +107,21 @@ sub expand_reasons($)
         elsif($r eq 'SYSTEM')   { $r{$reason_code{$_}}++ for @system  }
         elsif($r eq 'ALL')      { $r{$reason_code{$_}}++ for @reasons }
         else
-        {   error __x"unknown reason {which} in '{reasons}'"
+        {   error__x"unknown reason {which} in '{reasons}'"
               , which => $r, reasons => $reasons;
         }
     }
     (undef, @reasons)[sort {$a <=> $b} keys %r];
 }
 
-=function is_reason NAME
+=function is_reason $name
 Returns true if the STRING is one of the predefined REASONS.
 
-=function is_fatal REASON
-Returns true if the REASON is severe enough to cause an exception
+=function is_fatal $reason
+Returns true if the $reason is severe enough to cause an exception
 (or program termination).
 
-=function use_errno REASON
+=function use_errno $reason
 =cut
 
 sub is_reason($) { $reason_code{$_[0]} }
@@ -125,19 +132,19 @@ sub use_errno($) { $use_errno{$_[0]}   }
 =section Modes
 Run-modes are explained in M<Log::Report::Dispatcher>.
 
-=function mode_number NAME|MODE
-Returns the MODE as number.
+=function mode_number $name|$mode
+Returns the $mode as number.
 =cut
 
 sub mode_number($)  { $modes{$_[0]} }
 
-=function mode_accepts MODE
+=function mode_accepts $mode
 Returns something acceptable by M<expand_reasons()>
 =cut
 
 sub mode_accepts($) { $mode_accepts[$modes{$_[0]}] }
 
-=function must_show_location MODE, REASON
+=function must_show_location $mode, $reason
 =cut
 
 sub must_show_location($$)
@@ -148,7 +155,7 @@ sub must_show_location($$)
     || ($mode==3 && $reason_code{$reason} >= $reason_code{MISTAKE});
 }
 
-=function must_show_stack MODE, REASON
+=function must_show_stack $mode, $reason
 =cut
 
 sub must_show_stack($$)
@@ -235,7 +242,7 @@ sub parse_locale($)
       : $primary =~ m/^[a-z]{2,3}$/ ? $primary            # ISO639-1 and -2
       : $primary eq 'i' && @subtags ? lc(shift @subtags)  # IANA
       : $primary eq 'x' && @subtags ? lc(shift @subtags)  # Private
-      : error __x"unknown locale language in locale `{locale}'"
+      : error__x"unknown locale language in locale `{locale}'"
            , locale => $locale;
 
     my $script;
@@ -256,11 +263,11 @@ sub parse_locale($)
      };
 }
 
-=function pkg2domain PACKAGE, [DOMAIN, FILENAME, LINE]
-With DOMAIN, FILENAME and LINE, this registers a location where the
-textdomain is specified.  Each PACKAGE can only belong to one DOMAIN.
+=function pkg2domain $package, [$domain, $filename, $line]
+With $domain, $filename and $line, this registers a location where the
+textdomain is specified.  Each $package can only belong to one $domain.
 
-Without these parameters, the registered domain for the PACKAGE is
+Without these parameters, the registered domain for the $package is
 returned.
 =cut
 

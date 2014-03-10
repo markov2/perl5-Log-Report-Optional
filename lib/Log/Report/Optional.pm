@@ -40,7 +40,10 @@ my ($supported, @used_by);
 
 BEGIN {
    if($INC{'Log/Report.pm'})
-   {   $supported = 'Log::Report';
+   {   $supported  = 'Log::Report';
+       my $version = $Log::Report::VERSION;
+       die "Log::Report too old for ::Optional, need at least 1.00"
+           if $version && $version le '1.00';
    }
    else
    {   require Log::Report::Minimal;

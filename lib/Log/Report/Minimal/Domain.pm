@@ -25,7 +25,7 @@ Read L<Log::Report::Domain>.
 
 =section Constructors
 
-=c_method new OPTIONS
+=c_method new %options
 
 =requires name STRING
 
@@ -49,7 +49,7 @@ sub init($)
 sub name() {shift->{LRMD_name}}
 sub isConfigured() {shift->{LRMD_where}}
 
-=method configure OPTIONS
+=method configure %options
 =requires where ARRAY
 Specifies the location of the configuration.  It is not allowed to
 configure a domain on more than one location.
@@ -81,7 +81,7 @@ sub configure(%)
 #-------------------
 =section Action
 
-=c_method interpolate MSGID, [ARGS]
+=c_method interpolate $msgid, [$args]
 =cut
 
 sub interpolate(@)

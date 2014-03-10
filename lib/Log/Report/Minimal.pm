@@ -66,7 +66,7 @@ full-blown feature set.
 
 =chapter FUNCTIONS
 
-=function textdomain DOMAIN, [CONFIGURATION]
+=function textdomain $domain, [$configuration]
 =cut
 
 sub textdomain($@)
@@ -79,7 +79,8 @@ sub textdomain($@)
 
 =section Report Production and Configuration
 
-=function report [HASH-of-OPTIONS], REASON, MESSAGE|(STRING,PARAMS)
+=function report [$options], $reason, $message|<STRING,$params>
+Be warned that %options is a HASH here.
 
 =option  errno INTEGER
 =default errno C<$!> or C<1>
@@ -121,13 +122,13 @@ sub _report($$@)
     1;
 }
 
-=function dispatcher (TYPE, NAME, OPTIONS)|(COMMAND => NAME, [NAMEs])
+=function dispatcher <$type, $name, %options>|<$command, @names>
 Not supported.
 =cut
 
 sub dispatcher($@) { panic "no dispatchers available in ".__PACKAGE__ }
 
-=function try CODE, OPTIONS
+=function try CODE, %options
 =cut
 
 sub try(&@)
@@ -142,17 +143,17 @@ sub try(&@)
 }
 
 =section Abbreviations for report()
-=function trace MESSAGE
-=function assert MESSAGE
-=function info MESSAGE
-=function notice MESSAGE
-=function warning MESSAGE
-=function mistake MESSAGE
-=function error MESSAGE
-=function fault MESSAGE
-=function alert MESSAGE
-=function failure MESSAGE
-=function panic MESSAGE
+=function trace $message
+=function assert $message
+=function info $message
+=function notice $message
+=function warning $message
+=function mistake $message
+=function error $message
+=function fault $message
+=function alert $message
+=function failure $message
+=function panic $message
 =cut
 
 sub report(@)
@@ -176,12 +177,12 @@ sub panic(@)   {_report {}, PANIC   => @_}
 
 No translations, no L<Log::Report::Message> objects returned.
 
-=function __ MSGID
+=function __ $msgid
 =cut
 
 sub __($) { shift }
 
-=function __x MSGID, PAIRS
+=function __x $msgid, PAIRS
 =cut
 
 sub __x($@)
@@ -191,7 +192,7 @@ sub __x($@)
     _interpolate @_, _expand => 1;
 } 
 
-=function __n MSGID, PLURAL_MSGID, COUNT, PAIRS
+=function __n $msgid, $plural_msgid, $count, PAIRS
 =cut
 
 sub __n($$$@)
@@ -200,7 +201,7 @@ sub __n($$$@)
       , _count => $count, @_;
 }
 
-=function __nx MSGID, PLURAL_MSGID, COUNT, PAIRS
+=function __nx $msgid, $plural_msgid, $count, PAIRS
 =cut
 
 sub __nx($$$@)
@@ -209,7 +210,7 @@ sub __nx($$$@)
       , _count => $count, _expand => 1, @_;
 }
 
-=function __xn SINGLE_MSGID, PLURAL_MSGID, COUNT, PAURS
+=function __xn $single_msgid, $plural_msgid, $count, PAIRS
 =cut
 
 sub __xn($$$@)   # repeated for prototype
@@ -218,8 +219,8 @@ sub __xn($$$@)   # repeated for prototype
       , _count => $count , _expand => 1, @_;
 }
 
-=function N__ MSGID
-=function N__n SINGLE_MSGID, PLURAL_MSGID
+=function N__ $msgid
+=function N__n $single_msgid, $plural_msgid
 =function N__w STRING
 =cut
 
@@ -230,7 +231,7 @@ sub N__w(@)  {split " ", $_[0]}
 #------------------
 =section Configuration
 
-=method import [DOMAIN], OPTIONS
+=method import [$domain], %options
 See M<Log::Report::import()>.
 =cut
 

@@ -2,12 +2,17 @@ use ExtUtils::MakeMaker;
 
 use 5.008;
 
-my $version = '1.00';
+my $version = '1.01';
 
 my %prereq  =
   ( Test::More    => '0.86'
   , String::Print => '0.13'
+
+  # Optional dependency to Log::Report handled in ::Optional.  It is hard
+  # to make that work automatically, where Perl's install tools cannot
+  # handle recursive dependencies.
   );
+
 
 WriteMakefile
   ( NAME      => 'Log::Report::Optional'
