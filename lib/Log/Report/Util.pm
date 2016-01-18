@@ -11,7 +11,7 @@ our @EXPORT = qw/
   @reasons is_reason is_fatal use_errno
   mode_number expand_reasons mode_accepts
   must_show_location must_show_stack
-  escape_chars unescape_chars
+  escape_chars unescape_chars to_html
   parse_locale
   pkg2domain
  /;
@@ -31,8 +31,8 @@ my @user      = qw/MISTAKE ERROR/;
 my @program   = qw/TRACE ASSERT INFO NOTICE WARNING PANIC/;
 my @system    = qw/FAULT ALERT FAILURE/;
 
-my %is_fatal  = map +($_=>1), qw/ERROR FAULT FAILURE PANIC/;
-my %use_errno = map +($_=>1), qw/FAULT ALERT FAILURE/;
+my %is_fatal  = map +($_ => 1), qw/ERROR FAULT FAILURE PANIC/;
+my %use_errno = map +($_ => 1), qw/FAULT ALERT FAILURE/;
 
 my %modes     = (NORMAL => 0, VERBOSE => 1, ASSERT => 2, DEBUG => 3
   , 0 => 0, 1 => 1, 2 => 2, 3 => 3);
@@ -186,7 +186,7 @@ my %escape   = reverse %unescape;
 
 sub escape_chars($)
 {   my $str = shift;
-    $str =~ s/([\x00-\x1F"\\])/$escape{$1} || '?'/ge;
+    $str =~ s/([\x00-\x1F\x7F"\\])/$escape{$1} || '?'/ge;
     $str;
 }
 
@@ -194,6 +194,18 @@ sub unescape_chars($)
 {   my $str = shift;
     $str =~ s/(\\.)/$unescape{$1} || $1/ge;
     $str;
+}
+
+=function to_html $string
+[1.02] Escape HTML volatile characters.
+=cut
+
+my %tohtml = qw/  > gt   < lt   " quot  & amp /;
+
+sub to_html($)
+{   my $s = shift;
+    $s =~ s/([<>"&])/\&${tohtml{$1}};/g;
+    $s;
 }
 
 =function parse_locale STRING

@@ -186,8 +186,8 @@ sub __($) { shift }
 =cut
 
 sub __x($@)
-{   @_%2 or error __x"even length parameter list for __x at {where}",
-        where => join(' line ', (caller)[1,2]);
+{   @_%2 or error __x"even length parameter list for __x at {where}"
+      , where => join(' line ', (caller)[1,2]);
 
     _interpolate @_, _expand => 1;
 } 

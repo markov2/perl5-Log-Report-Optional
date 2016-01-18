@@ -2,7 +2,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 53;
+use Test::More tests => 54;
 
 use Log::Report::Util;
 
@@ -54,3 +54,8 @@ try_expand('WARNING-FAULT','WARNING,MISTAKE,ERROR,FAULT');
 try_expand('-INFO','TRACE,ASSERT,INFO');
 try_expand('ALERT-','ALERT,FAILURE,PANIC');
 
+#
+## to_thml
+#
+
+is to_html('<a>b&c"d'), '&lt;a&gt;b&amp;c&quot;d';
