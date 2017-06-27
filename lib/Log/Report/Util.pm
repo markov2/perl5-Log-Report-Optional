@@ -48,7 +48,7 @@ sub error__x($%)
 =chapter NAME
 Log::Report::Util - helpful routines to Log::Report
 
-=chapter SYNOPSYS
+=chapter SYNOPSIS
  my ($language, $territory, $charset, $modifier)
     = parse_locale 'nl_BE.utf-8@home';
 

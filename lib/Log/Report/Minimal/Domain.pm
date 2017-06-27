@@ -61,19 +61,27 @@ sub configure(%)
     my $here = $args{where} || [caller];
     if(my $s = $self->{LRMD_where})
     {   my $domain = $self->name;
-        Log::Report::panic("only one package can contain configuration; for $domain already in $s->[0] in file $s->[1] line $s->[2].  Now also found at $here->[1] line $here->[2]");
+        die "only one package can contain configuration; for $domain already in $s->[0] in file $s->[1] line $s->[2].  Now also found at $here->[1] line $here->[2]\n";
     }
     my $where = $self->{LRMD_where} = $here;
 
-    # documented in the super-class, the most useful manpage
+    # documented in the super-class, the more useful man-page
     my $format = $args{formatter} || 'PRINTI';
-    my $sp     = ref $format ? undef : String::Print->new;
-    $self->{LRMD_format}
-      = $format eq 'PRINTI'   ? sub {$sp->sprinti(@_)}
-      : $format eq 'PRINTP'   ? sub {$sp->sprintp(@_)}
-      : ref $format eq 'CODE' ? $format
-      : error __x"illegal formatter `{name}' at {fn} line {line}"
+    $format    = {} if $format eq 'PRINTI';
+
+    if(ref $format eq 'HASH')
+    {   my $class  = delete $format->{class}  || 'String::Print';
+        my $method = delete $format->{method} || 'sprinti';
+		my $sp     = $class->new(%$format);
+        $self->{LRMD_format} = sub { $sp->$method(@_) };
+    }
+    elsif(ref $format eq 'CODE')
+    {   $self->{LRMD_format} = $format;
+    }
+    else
+    {   error __x"illegal formatter `{name}' at {fn} line {line}"
           , name => $format, fn => $where->[1], line => $where->[2];
+    }
 
     $self;
 }
@@ -82,6 +90,11 @@ sub configure(%)
 =section Action
 
 =c_method interpolate $msgid, [$args]
+
+Interpolate the keys used in C<$msgid> from the values in C<$args>.
+This is handled by the formatter, by default a M<String::Print>
+instance.
+
 =cut
 
 sub interpolate(@)

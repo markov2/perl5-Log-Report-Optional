@@ -6,6 +6,7 @@ use base 'Exporter';
 
 use Log::Report::Util;
 use List::Util        qw/first/;
+use Scalar::Util      qw/blessed/;
 
 use Log::Report::Minimal::Domain ();
 
@@ -66,11 +67,23 @@ full-blown feature set.
 
 =chapter FUNCTIONS
 
-=function textdomain $domain, [$configuration]
+=function textdomain <[$name],$config>|<$name, 'DELETE'|'EXISTS'>|$domain
+
 =cut
 
 sub textdomain($@)
-{   my $name   = shift;
+{   if(@_==1 && blessed $_[0])
+    {   my $domain = shift;
+        return $textdomains{$domain->name} = $domain;
+    }
+
+    if(@_==2)
+    {    # used for 'maintenance' and testing
+        return delete $textdomains{$_[0]} if $_[1] eq 'DELETE';
+        return $textdomains{$_[0]} if $_[1] eq 'EXISTS';
+    }
+
+    my $name   = shift;
     my $domain = $textdomains{$name}
       ||= Log::Report::Minimal::Domain->new(name => $name);
 
