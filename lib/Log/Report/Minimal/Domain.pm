@@ -89,7 +89,7 @@ sub configure(%)
 #-------------------
 =section Action
 
-=c_method interpolate $msgid, [$args]
+=method interpolate $msgid, [$args]
 
 Interpolate the keys used in C<$msgid> from the values in C<$args>.
 This is handled by the formatter, by default a M<String::Print>
