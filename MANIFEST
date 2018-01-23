@@ -1,6 +1,7 @@
 ChangeLog
 MANIFEST
 Makefile.PL
+README.md
 lib/Log/Report/Minimal.pm
 lib/Log/Report/Minimal/Domain.pm
 lib/Log/Report/Optional.pm
