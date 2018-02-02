@@ -19,9 +19,9 @@ WriteMakefile
   , VERSION   => $version
   , PREREQ_PM => \%prereq
 
-  , AUTHOR    => 'Mark Overmeer'
+  , AUTHOR    => 'Mark Overmeer <mark@overmeer.net>'
   , ABSTRACT  => 'Log::Report in the lightest form'
-  , LICENSE   => 'perl'
+  , LICENSE   => 'perl_5'
 
   , META_MERGE =>
       { 'meta-spec' => { version => 2 }
@@ -31,9 +31,9 @@ WriteMakefile
             , url  => 'https://github.com/markov2/perl5-Log-Report-Optional.git'
             , web  => 'https://github.com/markov2/perl5-Log-Report-Optional'
             }
+         , homepage => 'http://perl.overmeer.net/CPAN/'
+         , license  => [ 'http://dev.perl.org/licenses/' ]
          }
-      , homepage => 'http://perl.overmeer.net/CPAN/'
-      , license  => [ 'http://dev.perl.org/licenses/' ]
       }
   );
 
@@ -42,6 +42,7 @@ sub MY::postamble { <<'__POSTAMBLE' }
 # for OODoc's oodist, DIST
 RAWDIR          = ../public_html/log-report-optional/raw
 DISTDIR         = ../public_html/log-report-optional/source
+LICENSE         = perl
 
 # for OODoc's oodist, POD
 FIRST_YEAR      = 2013
