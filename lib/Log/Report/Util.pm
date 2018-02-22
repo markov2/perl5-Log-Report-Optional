@@ -33,8 +33,9 @@ our %reason_code; { my $i=1; %reason_code = map +($_ => $i++), @reasons }
 my @user      = qw/MISTAKE ERROR/;
 my @program   = qw/TRACE ASSERT INFO NOTICE WARNING PANIC/;
 my @system    = qw/FAULT ALERT FAILURE/;
+my @fatal     = qw/ERROR FAULT FAILURE PANIC/;
 
-my %is_fatal  = map +($_ => 1), qw/ERROR FAULT FAILURE PANIC/;
+my %is_fatal  = map +($_ => 1), @fatal;
 my %use_errno = map +($_ => 1), qw/FAULT ALERT FAILURE/;
 
 my %modes     = (NORMAL => 0, VERBOSE => 1, ASSERT => 2, DEBUG => 3
@@ -70,10 +71,11 @@ man-page may contain some useful background information.
 =function expand_reasons $reasons
 Returns a sub-set of all existing message reason labels, based on the
 content $reasons string. The following rules apply:
- REASONS = BLOCK [ ',' BLOCKS]
- BLOCK   = '-' TO | FROM '-' TO | ONE | SOURCE
+
+ REASONS     = BLOCK [ ',' BLOCKS ]
+ BLOCK       = '-' TO | FROM '-' TO | ONE | SOURCE
  FROM,TO,ONE = 'TRACE' | 'ASSERT' | ,,, | 'PANIC'
- SOURCE  = 'USER' | 'PROGRAM' | 'SYSTEM' | 'ALL'
+ SOURCE      = 'USER' | 'PROGRAM' | 'SYSTEM' | 'FATAL' | 'ALL'
 
 The SOURCE specification group all reasons which are usually related to
 the problem: report about problems caused by the user, reported by
@@ -81,10 +83,12 @@ the program, or with system interaction.
 
 =examples of expended REASONS
  WARNING-FAULT # == WARNING,MISTAKE,ERROR,FAULT
+ WARNING,INFO  # == WARNING,INFO
  -INFO         # == TRACE-INFO
  ALERT-        # == ALERT,FAILURE,PANIC
  USER          # == MISTAKE,ERROR
  ALL           # == TRACE-PANIC
+ FATAL         # == ERROR,FAULT,FAILURE,PANIC [1.07]
 =cut
 
 sub expand_reasons($)
@@ -108,6 +112,7 @@ sub expand_reasons($)
         elsif($r eq 'USER')     { $r{$reason_code{$_}}++ for @user    }
         elsif($r eq 'PROGRAM')  { $r{$reason_code{$_}}++ for @program }
         elsif($r eq 'SYSTEM')   { $r{$reason_code{$_}}++ for @system  }
+        elsif($r eq 'FATAL')    { $r{$reason_code{$_}}++ for @fatal   }
         elsif($r eq 'ALL')      { $r{$reason_code{$_}}++ for @reasons }
         else
         {   error__x"unknown reason {which} in '{reasons}'"

@@ -42,7 +42,6 @@ sub MY::postamble { <<'__POSTAMBLE' }
 # for OODoc's oodist, DIST
 RAWDIR          = ../public_html/log-report-optional/raw
 DISTDIR         = ../public_html/log-report-optional/source
-LICENSE         = perl
 
 # for OODoc's oodist, POD
 FIRST_YEAR      = 2013
