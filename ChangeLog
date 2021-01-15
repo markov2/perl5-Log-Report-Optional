@@ -8,6 +8,7 @@ version 1.07: Fri 15 Jan 09:57:35 CET 2021
 	Improvements:
 	- expand_reasons 'FATAL' [Andrew Beverley]
 	- expand_reasons 'NONE'
+	- expand_reasons with ARRAY or undef
 
 version 1.06: Fri  2 Feb 08:53:01 CET 2018
 

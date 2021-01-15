@@ -76,7 +76,7 @@ man-page may contain some useful background information.
 Returns a sub-set of all existing message reason labels, based on the
 content $reasons string. The following rules apply:
 
- REASONS     = BLOCK [ ',' BLOCKS ]
+ REASONS     = BLOCK [ ',' BLOCKS ] | ARRAY-of-REASON
  BLOCK       = '-' TO | FROM '-' TO | ONE | SOURCE
  FROM,TO,ONE = 'TRACE' | 'ASSERT' | ,,, | 'PANIC'
  SOURCE      = 'USER' | 'PROGRAM' | 'SYSTEM' | 'FATAL' | 'ALL' | 'NONE'
@@ -99,8 +99,10 @@ the program, or with system interaction.
 
 sub expand_reasons($)
 {   my $reasons = shift or return ();
+    $reasons = [ split m/\,/, $reasons ] if ref $reasons ne 'ARRAY';
+
     my %r;
-    foreach my $r (split m/\,/, $reasons)
+    foreach my $r (@$reasons)
     {   if($r =~ m/^([a-z]*)\-([a-z]*)/i )
         {   my $begin = $reason_code{$1 || 'TRACE'};
             my $end   = $reason_code{$2 || 'PANIC'};
