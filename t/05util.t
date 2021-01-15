@@ -2,7 +2,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 54;
+use Test::More tests => 55;
 
 use Log::Report::Util;
 
@@ -53,6 +53,7 @@ try_expand('ALL', $all);
 try_expand('WARNING-FAULT','WARNING,MISTAKE,ERROR,FAULT');
 try_expand('-INFO','TRACE,ASSERT,INFO');
 try_expand('ALERT-','ALERT,FAILURE,PANIC');
+try_expand('NONE','');
 
 #
 ## to_thml
