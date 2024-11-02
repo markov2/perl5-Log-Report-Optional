@@ -305,7 +305,7 @@ sub pkg2domain($;$$$)
     if($d)
     {   # registration already exists
         return $domain if $d->[0] eq $domain;
-        printi "conflict: package {pkg} in {domain1} in {file1} line {line1}, but in {domain2} in {file2} line {line2}"
+        printi "conflict: package {pkg} in translation domain {domain1} in {file1} line {line1}, but in {domain2} in {file2} line {line2}"
            , pkg => $pkg
            , domain1 => $domain, file1 => $fn, line1 => $line
            , domain2 => $d->[0], file2 => $d->[1], line2 => $d->[2];

@@ -5,6 +5,9 @@ Mark Overmeer.
 
 version 1.08:
 
+	Improvements:
+	- better warning on translation domain conflict.
+
 version 1.07: Fri 15 Jan 09:57:35 CET 2021
 
 	Improvements:
