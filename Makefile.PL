@@ -47,18 +47,16 @@ my %oodist   = (
 	],
 );
 
+my %requires = (
+	'String::Print' => '0.91',
+	# Optional dependency to Log::Report handled in ::Optional.  It is hard
+	# to make that work automatically, where Perl's install tools cannot
+	# handle recursive dependencies.
+);
+
 WriteMakefile
 	NAME      => 'Log::Report::Optional',
 	VERSION   => $version,
-
-	PREREQ_PM => +{
-		'Test::More'    => '0.86',
-		'String::Print' => '0.91',
-		# Optional dependency to Log::Report handled in ::Optional.  It is hard
-		# to make that work automatically, where Perl's install tools cannot
-		# handle recursive dependencies.
-	},
-
 	AUTHOR    => 'Mark Overmeer <mark@overmeer.net>',
 	ABSTRACT  => 'Log::Report in its lightest form',
 	LICENSE   => 'perl_5',
@@ -71,20 +69,26 @@ WriteMakefile
 				url  => "$git.git",
 				web  => $git,
 			},
+			bugtracker => {
+				web  => "$git/issues",
+			},
 			homepage => $homepage,
 			license  => [ 'http//dev.perl.org/licenses/' ],
 		},
 		prereqs => {
+			runtime => {
+				requires => \%requires,
+			},
 			develop => {
 				requires => {
 					'OODoc'      => 3.03,
-				}
+				},
 			},
 			test => {
 				requires => {
 					'Test::More' => 1.00,
 					'Test::Pod'  => 1.00,
-				}
+				},
 			},
 		},
 

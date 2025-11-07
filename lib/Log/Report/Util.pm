@@ -75,9 +75,12 @@ man-page may contain some useful background information.
 
 =section Reasons
 
-=function expand_reasons $reasons
+=function expand_reasons $reasons|\@reasons
 Returns a sub-set of all existing message reason labels, based on the
-content $reasons string. The following rules apply:
+content reason patterns.  Either use a comma separated list of patterns
+in string $reasons, or an ARRAY of patterns.
+
+The following rules apply for the patterns:
 
   REASONS     = BLOCK [ ',' BLOCKS ] | ARRAY-of-REASON
   BLOCK       = '-' TO | FROM '-' TO | ONE | SOURCE
@@ -88,7 +91,7 @@ The SOURCE specification group all reasons which are usually related to
 the problem: report about problems caused by the user, reported by
 the program, or with system interaction.
 
-=examples of expended REASONS
+=examples of expanded REASONS
   WARNING-FAULT # == WARNING,MISTAKE,ERROR,FAULT
   WARNING,INFO  # == WARNING,INFO
   -INFO         # == TRACE-INFO
@@ -97,8 +100,6 @@ the program, or with system interaction.
   ALL           # == TRACE-PANIC
   FATAL         # == ERROR,FAULT,FAILURE,PANIC [1.07]
   NONE          # ==
-=cut
-
 
 =error unknown reason $which in '$reasons'
 =error reason '$begin' more serious than '$end' in '$reasons
